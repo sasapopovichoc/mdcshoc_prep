@@ -191,11 +191,25 @@ namespace HOCMessengerClient
 		{
 			// Show text from file About.txt
 			//
-			// TODO: Missing implementation.
+			using (TextReader tr = new StreamReader("About.txt"))
+			{
+				string aboutContent = tr.ReadToEnd();
+				Console.WriteLine(aboutContent);
+			}
 
 			// Put in eventLog table info that user executed About command.
 			//
-			// TODO: Missing implementation.
+			string uname = username == null ? "?" : username;
+			using (SqlConnection conn = new SqlConnection(connectionString))
+			{
+				conn.Open();
+				using (SqlCommand command = new SqlCommand())
+				{
+					command.Connection = conn;
+					command.CommandText = String.Format("INSERT INTO eventLog values(getutcdate(), 'User {0} asked for about.')", uname);
+					command.ExecuteNonQuery();
+				}
+			}
 		}
 
 		private void SendMessage(string message)
