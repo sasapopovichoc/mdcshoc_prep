@@ -248,14 +248,44 @@ namespace HOCMessengerClient
 			toUsername = null;
 			toUserId = null;
 
-			// If message looks like this: "John123,, Do you have 5 minutes?"
+			// If message looks like this: "John123,,Do you have 5 minutes?"
 			// that means that message text "Do you have 5 minutes?"
 			// should be sent to user with username John123.
 			// In that case find userId for John123 and set that value to: toUserId.
 			// Also, set toUsername to: John123
 			// If message does not contain sequence ",," that means to whom message should be send is not defined.
 			//
-			// TODO: Missing implementation.
+			if (message.Contains(",,"))
+			{
+				string uname = message.Substring(0, message.IndexOf(",,"));
+				int? uid = null;
+
+				using (SqlConnection conn = new SqlConnection(connectionString))
+				{
+					conn.Open();
+					using (SqlCommand command = new SqlCommand())
+					{
+						command.Connection = conn;
+						command.CommandText = String.Format("select userid from users where username = '{0}'", uname);
+						try
+						{
+							uid = Int32.Parse(command.ExecuteScalar().ToString());
+						}
+						catch (SqlException sqlException)
+						{
+							Console.WriteLine("Error: " + sqlException.Message);
+						}
+					}
+				}
+
+				if (uid != null)
+				{
+					toUsername = uname;
+					toUserId = uid;
+
+					message = message.Substring(message.IndexOf(",,") + 2);
+				}
+			}
 		}
 	}
 }
