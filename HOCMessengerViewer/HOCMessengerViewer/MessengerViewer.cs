@@ -84,7 +84,7 @@ WHERE
 			//
 			// TODO: Actual implementation missing here.
 
-			return "-";
+			return " " + reader.GetDateTime(1).ToString();
 		}
 	}
 }
