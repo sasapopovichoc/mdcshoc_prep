@@ -229,8 +229,8 @@ namespace HOCMessengerClient
 			{
 				string insertMessageQuery = String.Format(
 					"INSERT INTO messages VALUES ({0}, {1}, '{2}', getutcdate())",
-					"null", // This should not always be null. TODO: Missing implementation.
-					"null", // This should not always be null. TODO: Missing implementation.
+					userid == null ? "null" : userid.ToString(),
+					toUserId == null ? "null" : toUserId.ToString(),
 					message);
 
 				using (SqlCommand insertMessageCommand = new SqlCommand(insertMessageQuery))
