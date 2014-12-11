@@ -172,9 +172,19 @@ namespace HOCMessengerClient
 				Console.WriteLine(helpContent);
 			}
 
-			// Put in eventLog table info that user asked for help.
+			// Put in eventLog table info that user 'username' asked for help.
 			//
-			// TODO: Missing implementation.
+			string uname = username == null ? "?" : username;
+			using (SqlConnection conn = new SqlConnection(connectionString))
+			{
+				conn.Open();
+				using (SqlCommand command = new SqlCommand())
+				{
+					command.Connection = conn;
+					command.CommandText = String.Format("INSERT INTO eventLog values(getutcdate(), 'User {0} asked for help.')", uname);
+					command.ExecuteNonQuery();
+				}
+			}
 		}
 
 		private void ShowAbout()
