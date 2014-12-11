@@ -90,7 +90,35 @@ namespace HOCMessengerClient
 			// Check if that combination of username and password exist in the database.
 			// If yes, set variables userid and username to the right values.
 			//
-			// TODO: Missing implementation.
+			Console.WriteLine("Enter username...");
+			string uname = Console.ReadLine();
+			Console.WriteLine("Enter password...");
+			string password = Console.ReadLine();
+
+			using (SqlConnection conn = new SqlConnection(connectionString))
+			{
+				conn.Open();
+				using (SqlCommand command = new SqlCommand())
+				{
+					command.Connection = conn;
+					command.CommandText = String.Format("select username, userid from users where username = '{0}' and password = '{1}'", uname, password);
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						if (reader.Read())
+						{
+							int id = reader.GetInt32(1);
+							userid = id;
+							username = uname;
+
+							Console.WriteLine("Wellcome " + username + "!");
+						}
+						else
+						{
+							Console.WriteLine("Login failed. Bad username or password");
+						}
+					}
+				}
+			}
 		}
 
 		private void AddUser()
