@@ -66,10 +66,22 @@ namespace HOCMessengerClient
 			// Set userid and username to null;
 			//
 			// TODO: Missing implementation.
+			string uname = (username == null ? "?" : username);
+			username = null;
+			userid = null;
 
 			// Put entry in eventLog table that user 'Username' has logged out.
 			//
-			// TODO: Missing implementation.
+			using (SqlConnection conn = new SqlConnection(connectionString))
+			{
+				conn.Open();
+				using (SqlCommand command = new SqlCommand())
+				{
+					command.Connection = conn;
+					command.CommandText = String.Format("INSERT INTO eventLog values(getutcdate(), 'User {0} has logged out.')", uname);
+					command.ExecuteNonQuery();
+				}
+			}
 		}
 
 		private void Login()
