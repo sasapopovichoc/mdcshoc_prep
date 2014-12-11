@@ -66,9 +66,15 @@ WHERE
 			// Method should extract username which sent this message from reader (row of the table).
 			// If username is null, show "U?".
 			//
-			// TODO: Actual implementation missing here.
-
-			return "-";
+			if (reader.IsDBNull(2))
+			{
+				return "U?";
+			}
+			else
+			{
+				string username = reader.GetString(2);
+				return username;
+			}
 		}
 
 		protected string GetMessageTime(SqlDataReader reader)
