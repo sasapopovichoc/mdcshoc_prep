@@ -126,7 +126,42 @@ namespace HOCMessengerClient
 			// Ask for new username and password.
 			// Create new user by inserting row in the messenger database.
 			//
-			// TODO: Missing implementation.
+			Console.WriteLine("Enter new username");
+			string newusername = Console.ReadLine();
+			Console.WriteLine("Enter password");
+			string password = Console.ReadLine();
+			Console.WriteLine("Enter email");
+			string email = Console.ReadLine();
+
+			// Put entry in eventLog table that user 'Username' has logged out.
+			//
+			using (SqlConnection conn = new SqlConnection(connectionString))
+			{
+				conn.Open();
+
+				using (SqlCommand command = new SqlCommand())
+				{
+					command.Connection = conn;
+					command.CommandText = String.Format("select count(*) from users where username = '{0}'", newusername);
+					int count = Int32.Parse(command.ExecuteScalar().ToString());
+
+					if (count == 0)
+					{
+						using (SqlCommand command2 = new SqlCommand())
+						{
+							command2.Connection = conn;
+							command2.CommandText = String.Format("INSERT INTO users values('{0}', '{1}', '{2}')", newusername, password, email);
+							command2.ExecuteNonQuery();
+						}
+						Console.WriteLine("User added.");
+					}
+					else
+					{
+						Console.WriteLine("Username already exists. Chose new one and try again.");
+					}
+				}
+			}
+
 		}
 
 		private void ShowHelp()
