@@ -271,9 +271,9 @@ namespace HOCMessengerClient
 						{
 							uid = Int32.Parse(command.ExecuteScalar().ToString());
 						}
-						catch (SqlException sqlException)
+						catch (NullReferenceException exception)
 						{
-							Console.WriteLine("Error: " + sqlException.Message);
+							Console.WriteLine("Error: " + exception.Message);
 						}
 					}
 				}
